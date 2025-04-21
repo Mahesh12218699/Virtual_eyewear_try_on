@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to Eyewear Try-On</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0e0e0e;
+      font-family: 'Segoe UI', sans-serif;
+      color: #ffffff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 50px;
+      color: #00ffd5;
+      text-shadow: 0 0 8px rgba(0, 255, 213, 0.6);
+    }
+
+    .frame-gallery {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+
+    .frame {
+      width: 160px;
+      height: auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      padding: 10px;
+      box-shadow: 0 0 20px rgba(0, 255, 213, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .frame:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(0, 255, 213, 0.3);
+    }
+
+    .btn-start {
+      padding: 18px 40px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #00ffd5, #00c6ff);
+      border: none;
+      border-radius: 30px;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 255, 213, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn-start:hover {
+      background: linear-gradient(90deg, #00e3b9, #009fdc);
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(0, 255, 213, 0.6);
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .frame {
+        width: 120px;
+      }
+
+      .btn-start {
+        padding: 14px 28px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Virtual Eyewear Try-On</h1>
+
+  <div class="frame-gallery">
+    <img class="frame" src="/static/frames/full_rim1.png" alt="Full Rim">
+    <img class="frame" src="/static/frames/gold_round.jpg" alt="Gold Round">
+    <img class="frame" src="/static/frames/aviator_silver.jpg" alt="Silver Aviator">
+  </div>
+
+  <a href="/capture">
+    <button class="btn-start">Start Try-On</button>
+  </a>
+</body>
+</html>

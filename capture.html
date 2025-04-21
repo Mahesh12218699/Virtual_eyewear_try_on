@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Virtual Eyewear Try-On</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #1c1f2a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .video-container {
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px dashed #00ffd5;
+      width: 480px;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(0, 255, 213, 0.2);
+    }
+
+    video, canvas {
+      width: 480px;
+      height: 480px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    button {
+      margin-top: 30px;
+      background-color: #00ffd5;
+      color: #000;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 0 20px rgba(0, 255, 213, 0.4);
+    }
+
+    button:hover {
+      background-color: #00ccaa;
+    }
+
+    #error {
+      color: #ff4d4d;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="video-container">
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas" style="display: none;"></canvas>
+  </div>
+
+  <button id="captureBtn">📸 Capture & Try Glasses</button>
+  <div id="error"></div>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureBtn = document.getElementById('captureBtn');
+    const errorDiv = document.getElementById('error');
+
+    navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(() => {
+        errorDiv.innerText = "Unable to access webcam. Please allow camera permissions.";
+      });
+
+    captureBtn.addEventListener('click', () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob(blob => {
+        const formData = new FormData();
+        formData.append('photo', blob, 'captured.jpg');
+
+        fetch('/upload', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (response.redirected) {
+            window.location.href = response.url;
+          } else {
+            return response.text().then(text => {
+              errorDiv.innerText = text;
+            });
+          }
+        })
+        .catch(() => {
+          errorDiv.innerText = "Failed to upload image.";
+        });
+      }, 'image/jpeg');
+    });
+  </script>
+
+</body>
+</html>
